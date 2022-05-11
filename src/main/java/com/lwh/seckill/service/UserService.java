@@ -22,7 +22,7 @@ public interface UserService extends IService<User> {
 
 
     public  String getUuid();
-    RespBean register(RegisterVo registerVo);
+    RespBean register(RegisterVo user);
     RespBean login(LoginVo loginVo, HttpServletRequest request, HttpServletResponse response);
     public User getUserByCookie(String userTicket,HttpServletRequest request,HttpServletResponse response) throws IOException;
     public RespBean updatePassword(String userTicket,String password,HttpServletRequest request, HttpServletResponse response) throws IOException;

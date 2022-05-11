@@ -12,6 +12,7 @@ import com.lwh.seckill.vo.LoginVo;
 import com.lwh.seckill.vo.RegisterVo;
 import com.lwh.seckill.vo.RespBean;
 import com.lwh.seckill.vo.RespBeanEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2021-10-22
  */
 @Service
+@Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
 
@@ -109,16 +111,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public RespBean register(RegisterVo registerVo) {
-        User user=new User();
-        user.setNickname(registerVo.getUsername());
-        user.setPhone(registerVo.getPhone());
-        String dbpass=MD5Util.inputToDBpass(registerVo.getPassword(),"1234");
-        user.setPassword(dbpass);
-        boolean b = userService.save(user);
-        User user1 = userMapper.selectById(user.getId());
-        System.out.println("user="+user1);
-        System.out.println("re="+b);
+    public RespBean register(RegisterVo user) {
+        log.info("user={}",user);
+        String dbpass=MD5Util.inputToDBpass(user.getPassword(),"1234");
+        User user1 = new User();
+        user1.setPassword(dbpass);
+        user1.setPhone(user.getPhone());
+        user1.setNickname(user.getUsername());
+        log.info("user={}",user);
+        boolean b = userService.save(user1);
         if(b){
             return RespBean.success(RespBeanEnum.REGISTER_SUESS);
         }
